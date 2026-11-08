@@ -4,7 +4,7 @@ Marketing site and subscription endpoints for `twohundredk.com`. This folder is 
 
 The homepage uses a scroll-snapped chapter sequence and a persistent SVG workflow map. See [`docs/storyboard.md`](./docs/storyboard.md) for the visual progression.
 
-The dogfood MVP direction and integration gates are in [`docs/mvp-brief.md`](./docs/mvp-brief.md). The current build is still a marketing site with Stripe checkout scaffolding; it does not yet include the proposed website chatbot, Hermes connection, or ADPList booking flow.
+The dogfood MVP direction and integration gates are in [`docs/mvp-brief.md`](./docs/mvp-brief.md). **Status (2026-11-08):** Phase 1 is live on the Worker deployment — booking requests persist in Cloudflare D1, the admin API can confirm or cancel them, and the site chat is proxied to the Hermes assistant. Phase 2 (chat-initiated booking changes, ADPList replacement) has not started.
 
 ## Stack
 
@@ -68,7 +68,9 @@ Set non-secret variables in `wrangler.jsonc` or Cloudflare Worker settings:
 
 ## Hermes extension
 
-Setting `HERMES_CHAT_URL=https://hermes.twohundredk.com/...` reveals an optional chat link on the site. This is only a browser navigation; current code does not send inquiries, payment events, or customer data to Hermes. A future authenticated server-to-server integration can be added after defining which data Hermes may access and what actions require human approval.
+The site chat is connected to the Hermes assistant through the Worker. The browser posts to the same-origin `/api/chat` endpoint, which forwards a bounded conversation to the Hermes API using server-side credentials; nothing about the credential or upstream URL is exposed to the page. `/api/config` reports `assistantEnabled`, and the endpoint fails closed with a safe message when the integration is off or the upstream call fails.
+
+The assistant (profile `twohundredk-fde`) answers from owner-approved site facts, does not quote prices, and refers booking decisions to Tiancheng. It does not create or change bookings — that stays with the owner and the admin API. `HERMES_CHAT_URL`, if set, only adds an external chat link and is not the integration path.
 
 ## Current limits before production
 
@@ -80,7 +82,7 @@ Setting `HERMES_CHAT_URL=https://hermes.twohundredk.com/...` reveals an optional
 
 ## Bookings (Phase 1a)
 
-Booking requests are stored in Cloudflare D1 as **requests**, not confirmed appointments. Submitting the form creates a row with `status = "requested"`; only Tiancheng confirms a slot, by email. ADPList remains the instant-confirmation path, and the form falls back to it when D1 is not configured.
+Booking requests are stored in Cloudflare D1 as **requests**, not confirmed appointments. Submitting the form creates a row with `status = "requested"`; only Tiancheng confirms a slot — by email, or by updating the status through the admin API below. ADPList remains the instant-confirmation path, and the form falls back to it when D1 is not configured.
 
 ### Endpoints
 
