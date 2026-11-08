@@ -77,3 +77,50 @@ Setting `HERMES_CHAT_URL=https://hermes.twohundredk.com/...` reveals an optional
 - Add service terms, cancellation/refund details, privacy notice, and contact information.
 - The verified webhook is an integration point, not yet an onboarding or subscription fulfillment system.
 - No deployment, domain/DNS, billing account, or live payment was changed by this scaffold.
+
+## Bookings (Phase 1a)
+
+Booking requests are stored in Cloudflare D1 as **requests**, not confirmed appointments. Submitting the form creates a row with `status = "requested"`; only Tiancheng confirms a slot, by email. ADPList remains the instant-confirmation path, and the form falls back to it when D1 is not configured.
+
+### Endpoints
+
+| Method | Path | Auth | Purpose |
+| --- | --- | --- | --- |
+| `POST` | `/api/bookings` | same-origin browser request | Create a request. `201 {reference, status:"requested"}`; `503` when no `DB` binding exists. |
+| `GET` | `/api/admin/bookings` | `Authorization: Bearer $ADMIN_API_KEY` | List requests, newest first. Optional `?status=` (`requested`, `confirmed`, `rescheduled`, `cancelled`, `completed`) and `?limit=` (default 50, clamped 1–100). |
+| `GET` | `/api/admin/bookings/<reference>` | same | Fetch one request, `404` when unknown. |
+| `PATCH` | `/api/admin/bookings/<reference>` | same | Update `status`, `preferredTime` (changing the time without a status sets `rescheduled`), and `adminNotes` (appended to the visitor's notes with an `[admin]` marker). |
+
+`/api/config` reports `bookingEnabled`, which is `true` only when the `DB` binding exists, so the browser knows whether to POST a request or open ADPList.
+
+### D1 setup
+
+The database is created by the owner, not by the code:
+
+```sh
+npx wrangler d1 create twohundredk-bookings
+```
+
+Put the returned id into `wrangler.jsonc` (the `d1_databases` example there is commented out until then):
+
+```jsonc
+"d1_databases": [
+  { "binding": "DB", "database_name": "twohundredk-bookings", "database_id": "<database-id>", "migrations_dir": "migrations" }
+],
+```
+
+Apply the schema:
+
+```sh
+npx wrangler d1 migrations apply twohundredk-bookings --remote
+```
+
+For local runs use `--local` against a test config that declares the same binding.
+
+### Admin key
+
+```sh
+npx wrangler secret put ADMIN_API_KEY
+```
+
+Set the same value in `.dev.vars` for local development. Without `ADMIN_API_KEY` the admin endpoints return `503`; with a wrong key they return `401`. `ADMIN_API_KEY` is a bearer token for `/api/admin/bookings` — never commit a real one.

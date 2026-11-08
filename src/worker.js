@@ -29,6 +29,7 @@ export default {
       return json({
         assistantEnabled: env.HERMES_PUBLIC_CHAT_ENABLED === "true" && Boolean(env.HERMES_API_BASE_URL && env.HERMES_API_KEY && env.HERMES_MODEL),
         bookingUrl: "https://adplist.org/mentors/tiancheng-chen",
+        bookingEnabled: Boolean(env.DB),
         plans: Object.fromEntries(
           Object.entries(PLANS).map(([key, plan]) => [key, {
             name: plan.name,
@@ -49,6 +50,14 @@ export default {
 
     if (url.pathname === "/api/stripe/webhook" && request.method === "POST") {
       return receiveStripeWebhook(request, env);
+    }
+
+    if (url.pathname === "/api/bookings" && request.method === "POST") {
+      return createBooking(request, env);
+    }
+
+    if (url.pathname === "/api/admin/bookings" || url.pathname.startsWith("/api/admin/bookings/")) {
+      return adminBookings(request, env, url);
     }
 
     if (url.pathname.startsWith("/api/")) {
@@ -249,3 +258,206 @@ function sameOrigin(request, expectedOrigin) {
 function json(body, status = 200) {
   return new Response(JSON.stringify(body), { status, headers: JSON_HEADERS });
 }
+
+const BOOKING_TOPICS = new Set(["career-pivot", "tech-strategy", "getting-to-know-you"]);
+const BOOKING_STATUSES = new Set(["requested", "confirmed", "rescheduled", "cancelled", "completed"]);
+const BOOKING_REFERENCE_ALPHABET = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const BOOKING_EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const BOOKING_COLUMNS = "id, reference, name, email, topic, preferred_time, timezone, notes, consent, source, status, created_at, updated_at";
+const BOOKING_INVALID = "Please check the form and try again.";
+const BOOKING_ADPLIST_FALLBACK = "Please use the ADPList link below.";
+
+function createBookingReference() {
+  const bytes = new Uint8Array(8);
+  crypto.getRandomValues(bytes);
+  let suffix = "";
+  for (const byte of bytes) suffix += BOOKING_REFERENCE_ALPHABET[byte % BOOKING_REFERENCE_ALPHABET.length];
+  return `THK-${suffix}`;
+}
+
+function optionalBookingText(value, maxLength) {
+  if (value === undefined || value === null) return null;
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return null;
+  if (trimmed.length > maxLength) return undefined;
+  return trimmed;
+}
+
+function toBooking(row) {
+  if (!row) return row;
+  return { ...row, consent: row.consent === 1 || row.consent === true };
+}
+
+async function createBooking(request, env) {
+  const requestOrigin = new URL(request.url).origin;
+  if (!sameOrigin(request, requestOrigin)) return json({ error: "Request not allowed" }, 403);
+  if (!env.DB) return json({ error: `Booking requests are not open yet. ${BOOKING_ADPLIST_FALLBACK}` }, 503);
+
+  let input;
+  try {
+    input = JSON.parse(await readLimitedText(request, 8000));
+  } catch {
+    return json({ error: BOOKING_INVALID }, 400);
+  }
+
+  const name = typeof input?.name === "string" ? input.name.trim() : "";
+  if (name.length < 1 || name.length > 120) return json({ error: BOOKING_INVALID }, 400);
+
+  const email = typeof input?.email === "string" ? input.email.trim() : "";
+  if (email.length > 200 || !BOOKING_EMAIL_PATTERN.test(email)) return json({ error: BOOKING_INVALID }, 400);
+
+  if (!BOOKING_TOPICS.has(input?.topic)) return json({ error: BOOKING_INVALID }, 400);
+
+  const preferredTime = typeof input?.preferredTime === "string" ? input.preferredTime.trim() : "";
+  if (preferredTime.length < 1 || preferredTime.length > 200) return json({ error: BOOKING_INVALID }, 400);
+
+  const timezone = optionalBookingText(input?.timezone, 64);
+  if (timezone === undefined) return json({ error: BOOKING_INVALID }, 400);
+
+  const notes = optionalBookingText(input?.notes, 1000);
+  if (notes === undefined) return json({ error: BOOKING_INVALID }, 400);
+
+  if (input?.consent !== true) {
+    return json({ error: "Please confirm consent so Tiancheng can reply to your request." }, 400);
+  }
+
+  const reference = createBookingReference();
+  const now = new Date().toISOString();
+  try {
+    await env.DB.prepare(
+      `INSERT INTO bookings (reference, name, email, topic, preferred_time, timezone, notes, consent, source, status, created_at, updated_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'website-form', 'requested', ?, ?)`,
+    ).bind(reference, name, email, input.topic, preferredTime, timezone, notes, 1, now, now).run();
+  } catch {
+    return json({ error: `The request could not be saved. ${BOOKING_ADPLIST_FALLBACK}` }, 500);
+  }
+
+  return json({ reference, status: "requested" }, 201);
+}
+
+function authorizeAdmin(request, env) {
+  if (!env.ADMIN_API_KEY) return json({ error: "Admin API is not configured." }, 503);
+  const authorization = request.headers.get("authorization") || "";
+  if (!constantTimeEqual(authorization, `Bearer ${env.ADMIN_API_KEY}`)) return json({ error: "Unauthorized" }, 401);
+  return null;
+}
+
+async function adminBookings(request, env, url) {
+  const denied = authorizeAdmin(request, env);
+  if (denied) return denied;
+
+  const basePath = "/api/admin/bookings";
+  const remainder = url.pathname.length > basePath.length ? url.pathname.slice(basePath.length) : "";
+  const reference = remainder ? decodeURIComponent(remainder.replace(/^\/+/, "")) : "";
+
+  if (!reference) {
+    if (request.method !== "GET") return json({ error: "Method not allowed" }, 405);
+    return listBookings(env, url);
+  }
+
+  if (request.method === "GET") {
+    const row = await findBooking(env, reference);
+    if (!row) return json({ error: "Booking not found" }, 404);
+    return json(toBooking(row));
+  }
+
+  if (request.method === "PATCH") {
+    return updateBooking(request, env, reference);
+  }
+
+  return json({ error: "Method not allowed" }, 405);
+}
+
+async function findBooking(env, reference) {
+  try {
+    return await env.DB.prepare(`SELECT ${BOOKING_COLUMNS} FROM bookings WHERE reference = ?`).bind(reference).first();
+  } catch {
+    return null;
+  }
+}
+
+async function listBookings(env, url) {
+  const status = url.searchParams.get("status");
+  if (status !== null && !BOOKING_STATUSES.has(status)) return json({ error: "Unknown status filter." }, 400);
+
+  let limit = Number.parseInt(url.searchParams.get("limit") ?? "50", 10);
+  if (!Number.isFinite(limit)) limit = 50;
+  limit = Math.min(100, Math.max(1, limit));
+
+  try {
+    const statement = status
+      ? env.DB.prepare(`SELECT ${BOOKING_COLUMNS} FROM bookings WHERE status = ? ORDER BY created_at DESC LIMIT ?`).bind(status, limit)
+      : env.DB.prepare(`SELECT ${BOOKING_COLUMNS} FROM bookings ORDER BY created_at DESC LIMIT ?`).bind(limit);
+    const rows = await statement.all();
+    return json({ bookings: (rows.results || []).map(toBooking) });
+  } catch {
+    return json({ error: "Bookings could not be loaded." }, 500);
+  }
+}
+
+async function updateBooking(request, env, reference) {
+  let input;
+  try {
+    input = JSON.parse(await readLimitedText(request, 8000));
+  } catch {
+    return json({ error: "Please check the request and try again." }, 400);
+  }
+  if (!input || typeof input !== "object" || Array.isArray(input)) {
+    return json({ error: "Please check the request and try again." }, 400);
+  }
+
+  const current = await findBooking(env, reference);
+  if (!current) return json({ error: "Booking not found" }, 404);
+
+  const assignments = [];
+  const values = [];
+  let preferredTimeChanged = false;
+
+  if ("status" in input) {
+    if (typeof input.status !== "string" || !BOOKING_STATUSES.has(input.status)) {
+      return json({ error: "Unknown status." }, 400);
+    }
+    assignments.push("status = ?");
+    values.push(input.status);
+  }
+
+  if ("preferredTime" in input) {
+    const preferredTime = typeof input.preferredTime === "string" ? input.preferredTime.trim() : "";
+    if (preferredTime.length < 1 || preferredTime.length > 200) return json({ error: BOOKING_INVALID }, 400);
+    assignments.push("preferred_time = ?");
+    values.push(preferredTime);
+    preferredTimeChanged = true;
+  }
+
+  if ("adminNotes" in input) {
+    const adminNotes = typeof input.adminNotes === "string" ? input.adminNotes.trim() : "";
+    if (!adminNotes || adminNotes.length > 1000) return json({ error: BOOKING_INVALID }, 400);
+    const appended = `${current.notes || ""}\n[admin] ${adminNotes}`;
+    assignments.push("notes = ?");
+    values.push(appended);
+  }
+
+  if (!assignments.length) {
+    return json({ error: "Provide a status, preferredTime, or adminNotes to update." }, 400);
+  }
+
+  if (preferredTimeChanged && !("status" in input)) {
+    assignments.push("status = ?");
+    values.push("rescheduled");
+  }
+
+  assignments.push("updated_at = ?");
+  values.push(new Date().toISOString());
+
+  try {
+    await env.DB.prepare(`UPDATE bookings SET ${assignments.join(", ")} WHERE reference = ?`).bind(...values, reference).run();
+  } catch {
+    return json({ error: "The booking could not be updated." }, 500);
+  }
+
+  const updated = await findBooking(env, reference);
+  if (!updated) return json({ error: "Booking not found" }, 404);
+  return json(toBooking(updated));
+}
+

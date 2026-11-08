@@ -247,18 +247,33 @@
             <div>
               <p class="booking-kicker">START WITH A CONVERSATION</p>
               <h2 id="booking-title">Book an <em>intro call.</em></h2>
-              <p class="booking-copy">Choose the topic you want to discuss, then continue to ADPList. Select the matching session there, choose an available time, and confirm with ADPList. This website does not reserve a slot.</p>
+              <p class="booking-copy">Send a request with the topic, a time that suits you, and your timezone. This is a request, not a confirmed booking: Tiancheng replies by email to confirm the exact slot. Need instant confirmation? ADPList still shows live availability.</p>
             </div>
             <form class="booking-form" id="booking-form">
               <label for="booking-topic">What would you like to discuss?</label>
               <select id="booking-topic" name="topic" required>
                 <option value="">Choose a topic</option>
-                <option>Career pivot coaching · 30 minutes</option>
-                <option>Tech strategy for startup founders · 30 minutes</option>
-                <option>Getting to know you · 15 minutes</option>
+                <option value="career-pivot">Career pivot coaching · 30 minutes</option>
+                <option value="tech-strategy">Tech strategy for startup founders · 30 minutes</option>
+                <option value="getting-to-know-you">Getting to know you · 15 minutes</option>
               </select>
-              <button class="button button-dark" type="submit">Continue to ADPList <span aria-hidden="true">&#8599;</span></button>
-              <p class="booking-note">Your topic selection is a guide only; choose the matching session again on ADPList.</p>
+              <label for="booking-name">Your name</label>
+              <input id="booking-name" name="name" type="text" autocomplete="name" maxlength="120" required>
+              <label for="booking-email">Email</label>
+              <input id="booking-email" name="email" type="email" autocomplete="email" maxlength="200" required>
+              <label for="booking-preferred-time">Preferred time</label>
+              <input id="booking-preferred-time" name="preferredTime" type="text" maxlength="200" placeholder="Tue Nov 10 · 10:00 AM" required>
+              <label for="booking-timezone">Timezone (optional)</label>
+              <input id="booking-timezone" name="timezone" type="text" maxlength="64" placeholder="America/Toronto">
+              <label for="booking-notes">Anything that would help prepare? (optional)</label>
+              <textarea id="booking-notes" name="notes" rows="3" maxlength="1000"></textarea>
+              <label class="booking-consent" for="booking-consent">
+                <input id="booking-consent" name="consent" type="checkbox" required>
+                I agree Tiancheng may store these details to respond to my booking request.
+              </label>
+              <button class="button button-dark" type="submit">Request this intro call</button>
+              <a class="button button-dark" id="booking-adplist" href="https://adplist.org/mentors/tiancheng-chen" target="_blank" rel="noopener">Prefer instant booking? Continue to ADPList <span aria-hidden="true">&#8599;</span></a>
+              <p class="booking-note">Submitting sends a request. Nothing is confirmed until Tiancheng confirms by email.</p>
             </form>
           </section>
           <div class="faq-layout">

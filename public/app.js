@@ -47,6 +47,7 @@ async function loadConfig() {
     }
     window.assistantEnabled = config.assistantEnabled === true;
     window.bookingUrl = config.bookingUrl || "https://adplist.org/mentors/tiancheng-chen";
+    window.bookingEnabled = config.bookingEnabled === true;
     if (!window.assistantEnabled && chatMessages && chatMessages.childElementCount === 0) {
       addChatMessage("assistant", "I’m not connected yet. You can book an intro session below; ADPList will show available times and confirm the booking.");
     }
@@ -55,14 +56,76 @@ async function loadConfig() {
   }
 }
 
+const ADPLIST_URL = "https://adplist.org/mentors/tiancheng-chen";
 const bookingForm = document.querySelector("#booking-form");
-bookingForm?.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const topic = bookingForm.elements.topic.value;
-  if (!topic) return;
-  const opened = window.open(window.bookingUrl || "https://adplist.org/mentors/tiancheng-chen", "_blank");
+
+function openBookingLink() {
+  const opened = window.open(window.bookingUrl || ADPLIST_URL, "_blank");
   if (opened) opened.opener = null;
   else announce("Your browser blocked the new tab. Use the ADPList profile link in this section.");
+}
+
+function showBookingConfirmation(reference) {
+  const card = document.querySelector("#booking");
+  if (!card || !bookingForm) return;
+  bookingForm.style.display = "none";
+  const confirmation = document.createElement("div");
+  confirmation.className = "booking-confirmation";
+  confirmation.setAttribute("role", "status");
+  const message = document.createElement("p");
+  message.className = "booking-note";
+  message.textContent = `Request received — reference ${reference}. This is not confirmed yet; Tiancheng will confirm by email.`;
+  const link = document.createElement("a");
+  link.className = "button button-dark";
+  link.href = window.bookingUrl || ADPLIST_URL;
+  link.target = "_blank";
+  link.rel = "noopener";
+  link.textContent = "Prefer instant booking? Continue to ADPList ↗";
+  confirmation.append(message, link);
+  card.append(confirmation);
+}
+
+bookingForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  if (!window.bookingEnabled) {
+    openBookingLink();
+    return;
+  }
+
+  const submit = bookingForm.querySelector('button[type="submit"]');
+  const payload = {
+    name: bookingForm.elements.name.value.trim(),
+    email: bookingForm.elements.email.value.trim(),
+    topic: bookingForm.elements.topic.value,
+    preferredTime: bookingForm.elements.preferredTime.value.trim(),
+    timezone: bookingForm.elements.timezone.value.trim(),
+    notes: bookingForm.elements.notes.value.trim(),
+    consent: bookingForm.elements.consent.checked === true,
+  };
+
+  submit.disabled = true;
+  submit.textContent = "Sending request…";
+  try {
+    const response = await fetch("/api/bookings", {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify(payload),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.reference) throw new Error(result.error || "The request could not be sent. Please use the ADPList link.");
+    announce(`Request received — reference ${result.reference}. This is not confirmed yet; Tiancheng will confirm by email.`);
+    showBookingConfirmation(result.reference);
+  } catch (error) {
+    announce(error.message || "The request could not be sent. Please use the ADPList link.");
+    submit.disabled = false;
+    submit.textContent = "Request this intro call";
+  }
+});
+
+document.querySelector("#booking-adplist")?.addEventListener("click", (event) => {
+  event.preventDefault();
+  openBookingLink();
 });
 
 const chatPanel = document.querySelector("#chat-panel");
