@@ -103,7 +103,7 @@
         <a href="#questions">Questions</a>
         <div class="hermes-link" hidden><a href="#" data-hermes-link>Hermes chat &#8599;</a></div>
       </nav>
-      <a class="header-cta" href="#questions">Book an intro call <span>&#8599;</span></a>
+      <a class="header-cta" href="#booking">Book an intro call <span>&#8599;</span></a>
     </header>
 
     <nav class="chapter-rail" aria-label="Chapters">
@@ -243,11 +243,29 @@
       <section class="chapter faq-chapter" id="questions" data-stage="6">
         <div class="chapter-content faq-content">
           <p class="chapter-kicker"><span>07</span><span class="kicker-rule"></span><span>QUESTIONS</span></p>
+          <section class="booking-card" id="booking" aria-labelledby="booking-title">
+            <div>
+              <p class="booking-kicker">START WITH A CONVERSATION</p>
+              <h2 id="booking-title">Book an <em>intro call.</em></h2>
+              <p class="booking-copy">Choose the topic you want to discuss, then continue to ADPList. Select the matching session there, choose an available time, and confirm with ADPList. This website does not reserve a slot.</p>
+            </div>
+            <form class="booking-form" id="booking-form">
+              <label for="booking-topic">What would you like to discuss?</label>
+              <select id="booking-topic" name="topic" required>
+                <option value="">Choose a topic</option>
+                <option>Career pivot coaching · 30 minutes</option>
+                <option>Tech strategy for startup founders · 30 minutes</option>
+                <option>Getting to know you · 15 minutes</option>
+              </select>
+              <button class="button button-dark" type="submit">Continue to ADPList <span aria-hidden="true">&#8599;</span></button>
+              <p class="booking-note">Your topic selection is a guide only; choose the matching session again on ADPList.</p>
+            </form>
+          </section>
           <div class="faq-layout">
             <div>
               <h2>Clarify <em>boundaries</em> before starting.</h2>
               <p class="faq-intro">What the work includes, what it does not, and who owns what afterwards.</p>
-              <a class="button button-dark" href="#plans">See the plans <span>&#8599;</span></a>
+              <a class="button button-dark" href="#booking">Book an intro call <span>&#8599;</span></a>
             </div>
             <div class="faq-list">
               <details>
@@ -288,6 +306,15 @@
       </section>
     </main>
 
+    <section class="chat-panel" id="chat-panel" role="dialog" aria-modal="false" aria-labelledby="chat-title" hidden>
+      <header class="chat-header"><div><p>TWOHUNDREDK · ASSISTANT</p><h2 id="chat-title">Ask a question</h2></div><button type="button" class="chat-close" aria-label="Close chat">&#215;</button></header>
+      <p class="chat-disclosure">AI assistant. Messages are sent to the TwoHundredK assistant service. Please don’t share sensitive information. Replies may be wrong; confirm important details with Tiancheng.</p>
+      <div class="chat-messages" id="chat-messages" aria-live="polite" aria-label="Conversation"></div>
+      <form class="chat-consent" id="chat-consent"><label><input type="checkbox" required> I agree to send my messages to the assistant to answer my question.</label></form>
+      <form class="chat-form" id="chat-form"><label class="sr-only" for="chat-input">Your question</label><textarea id="chat-input" maxlength="2000" rows="2" placeholder="Ask about the service…" required></textarea><button class="button button-dark" type="submit">Send</button></form>
+      <a class="chat-booking-link" href="#booking">Prefer to talk? Book an intro call &#8599;</a>
+    </section>
+    <button class="chat-launcher" type="button" aria-expanded="false" aria-controls="chat-panel"><span aria-hidden="true">&#10022;</span> Ask a question</button>
     <div class="toast" role="status" aria-live="polite"></div>
   </body>
 </html>

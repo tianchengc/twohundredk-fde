@@ -45,18 +45,88 @@ async function loadConfig() {
       }
       if (status && plan.checkoutAvailable) status.textContent = "Secure checkout hosted by Stripe.";
     }
-    if (config.hermesChatUrl) {
-      const link = document.querySelector("[data-hermes-link]");
-      const wrapper = document.querySelector(".hermes-link");
-      if (link && wrapper) {
-        link.href = config.hermesChatUrl;
-        wrapper.hidden = false;
-      }
+    window.assistantEnabled = config.assistantEnabled === true;
+    window.bookingUrl = config.bookingUrl || "https://adplist.org/mentors/tiancheng-chen";
+    if (!window.assistantEnabled && chatMessages && chatMessages.childElementCount === 0) {
+      addChatMessage("assistant", "I’m not connected yet. You can book an intro session below; ADPList will show available times and confirm the booking.");
     }
   } catch {
     // The marketing page remains usable if the configuration endpoint is unavailable.
   }
 }
+
+const bookingForm = document.querySelector("#booking-form");
+bookingForm?.addEventListener("submit", (event) => {
+  event.preventDefault();
+  const topic = bookingForm.elements.topic.value;
+  if (!topic) return;
+  const opened = window.open(window.bookingUrl || "https://adplist.org/mentors/tiancheng-chen", "_blank");
+  if (opened) opened.opener = null;
+  else announce("Your browser blocked the new tab. Use the ADPList profile link in this section.");
+});
+
+const chatPanel = document.querySelector("#chat-panel");
+const chatLauncher = document.querySelector(".chat-launcher");
+const chatMessages = document.querySelector("#chat-messages");
+const chatForm = document.querySelector("#chat-form");
+const chatInput = document.querySelector("#chat-input");
+const chatConsent = document.querySelector("#chat-consent input");
+const chatHistory = [];
+window.assistantEnabled = false;
+
+function toggleChat(open) {
+  chatPanel.hidden = !open;
+  chatLauncher.setAttribute("aria-expanded", String(open));
+  if (open) chatInput.focus();
+}
+
+function addChatMessage(role, content) {
+  const message = document.createElement("p");
+  message.className = `chat-message ${role}`;
+  message.textContent = content;
+  chatMessages.append(message);
+  chatMessages.scrollTop = chatMessages.scrollHeight;
+  return message;
+}
+
+chatLauncher?.addEventListener("click", () => toggleChat(chatPanel.hidden));
+chatPanel?.querySelector(".chat-close")?.addEventListener("click", () => toggleChat(false));
+chatForm?.addEventListener("submit", async (event) => {
+  event.preventDefault();
+  const content = chatInput.value.trim();
+  if (!content) return;
+  if (!chatConsent.checked) {
+    chatConsent.focus();
+    announce("Please agree before sending your message.");
+    return;
+  }
+  if (!window.assistantEnabled) {
+    addChatMessage("assistant", "Live chat is still being connected. Please use the booking link below and ask Tiancheng on your intro call.");
+    chatInput.value = "";
+    return;
+  }
+  chatForm.querySelector("button").disabled = true;
+  chatHistory.push({ role: "user", content });
+  addChatMessage("user", content);
+  chatInput.value = "";
+  const pending = addChatMessage("assistant", "Thinking…");
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "content-type": "application/json", accept: "application/json" },
+      body: JSON.stringify({ messages: chatHistory.slice(-10) }),
+    });
+    const result = await response.json();
+    if (!response.ok || !result.reply) throw new Error(result.error || "The assistant is unavailable. Please use the booking link.");
+    pending.textContent = result.reply;
+    chatHistory.push({ role: "assistant", content: result.reply });
+  } catch (error) {
+    pending.textContent = error.message || "The assistant is unavailable. Please use the booking link.";
+  } finally {
+    chatForm.querySelector("button").disabled = false;
+    chatInput.focus();
+  }
+});
 
 document.querySelectorAll("[data-checkout]").forEach((button) => {
   button.addEventListener("click", async () => {

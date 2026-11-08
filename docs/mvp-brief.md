@@ -1,6 +1,6 @@
 # TwoHundredK consulting dogfood MVP
 
-Updated: 2026-11-07 (America/Toronto)
+Updated: 2026-11-08 (America/Toronto)
 
 ## Product goal
 
@@ -68,8 +68,11 @@ After the personal workflow meets its acceptance criteria, extract reusable busi
 - Secrets stay server-side; logs do not contain full visitor messages or unnecessary contact data.
 - No live booking, email send, DNS change, or production deployment is used as a test without explicit authorization.
 
-## Current implementation status
+## Current implementation status — 2026-11-08
 
-**Not implemented or verified:** embedded website chat, Hermes API integration, ADPList booking adapter, lead storage, automated email, owner lead dashboard, or public auto-replies.
+- **Implemented in the website code:** accessible chat panel, explicit consent before sending a message, same-origin `/api/chat` Worker proxy, server-side-only Hermes credentials, bounded request sizes/history, and fail-closed behavior when the Hermes integration is disabled or unavailable. The public Worker does not reveal the Hermes URL/key.
+- **Implemented in the website code:** intro-call topic chooser that hands the visitor to Tiancheng's official ADPList profile. ADPList handles slot selection and confirmation; the website does not claim to create or confirm a booking.
+- **Not yet enabled or end-to-end verified:** public Hermes API access, dedicated API toolset restrictions, live AI replies, direct slot creation, lead persistence, owner notifications, email reminders, or booking-state sync. These require separate Hermes/API and provider-side configuration; never enable a public API endpoint until the dedicated profile's toolsets and network boundary are verified.
+- **Deployment status:** not yet verified for this change. Verify the GitHub commit and then check the live Cloudflare-served HTML, config endpoint, booking handoff, and chat fallback.
 
-**Already present:** static website on a Cloudflare Worker, Stripe subscription checkout scaffolding, Stripe webhook signature verification, responsive landing page, and a visible optional Hermes link. The subscription setup is not fully configured for production.
+**Already present:** Cloudflare Worker static assets, Stripe subscription checkout scaffolding, Stripe webhook signature verification, and the responsive consulting landing page. Subscription checkout remains unconfigured unless its secrets and price IDs are set.
