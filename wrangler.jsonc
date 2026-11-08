@@ -1,0 +1,17 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "twohundredk-fde",
+  "main": "src/worker.js",
+  "compatibility_date": "2026-11-05",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "vars": {
+    "SITE_ORIGIN": "https://twohundredk.com",
+    "PRICE_LABEL_LAUNCH": "Monthly · scope agreed",
+    "PRICE_LABEL_BUILD": "Monthly · scope agreed",
+    "PRICE_LABEL_EMBEDDED": "Monthly · scope agreed"
+  }
+}
