@@ -8,16 +8,19 @@
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
   },
-  // Phase 1a: booking requests are stored in D1. The owner creates the database
-  // and replaces the id before deploying. Without the binding, /api/bookings
-  // returns 503 and the form falls back to ADPList.
-  // "d1_databases": [
-  //   { "binding": "DB", "database_name": "twohundredk-bookings", "database_id": "REPLACE_WITH_D1_DATABASE_ID", "migrations_dir": "migrations" }
-  // ],
+  // Phase 1a: booking requests are stored in D1. The binding is now active with
+  // the owner's database (twohundredk-bookings), so /api/bookings persists to D1
+  // instead of returning 503 and falling back to ADPList.
+  "d1_databases": [
+    { "binding": "DB", "database_name": "twohundredk-bookings", "database_id": "646825d4-96e8-4c9a-8573-ef16510eadfc", "migrations_dir": "migrations" }
+  ],
   "vars": {
     "SITE_ORIGIN": "https://twohundredk.com",
     "PRICE_LABEL_LAUNCH": "Monthly · scope agreed",
     "PRICE_LABEL_BUILD": "Monthly · scope agreed",
-    "PRICE_LABEL_EMBEDDED": "Monthly · scope agreed"
+    "PRICE_LABEL_EMBEDDED": "Monthly · scope agreed",
+    "HERMES_API_BASE_URL": "https://hermes.twohundredk.com/fde-api/p/twohundredk-fde",
+    "HERMES_MODEL": "twohundredk-fde",
+    "HERMES_PUBLIC_CHAT_ENABLED": "true"
   }
 }
