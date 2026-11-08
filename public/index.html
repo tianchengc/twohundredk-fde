@@ -77,212 +77,217 @@
           <circle class="review-check" cx="34" cy="-36" r="12" />
           <path class="review-check-mark" d="M29 -36L33 -32L40 -40" />
         </g>
-        <g class="map-caption" transform="translate(653 43>zë›h‘éì¶»§q«^v8; }
-html[data-stage="1"] .map-junction { opacity: .42; }
-html[data-stage="2"] .route-mapped { opacity: .62; }
-html[data-stage="2"] .route-live { stroke-dashoffset: 0; }
-html[data-stage="2"] .source-node { opacity: .9; }
-html[data-stage="2"] .map-junction { opacity: .82; }
-html[data-stage="2"] .workflow-core { opacity: .9; }
-html[data-stage="2"] .signal { opacity: .95; }
-html[data-stage="3"] .route-live, html[data-stage="4"] .route-live, html[data-stage="5"] .route-live, html[data-stage="6"] .route-live { stroke-dashoffset: 0; }
-html[data-stage="3"] .review-node, html[data-stage="4"] .review-node, html[data-stage="5"] .review-node, html[data-stage="6"] .review-node { opacity: 1; }
-html[data-stage="3"] .workflow-core, html[data-stage="4"] .workflow-core, html[data-stage="5"] .workflow-core, html[data-stage="6"] .workflow-core { opacity: 0; }
-html[data-stage="3"] .map-caption, html[data-stage="4"] .map-caption, html[data-stage="5"] .map-caption, html[data-stage="6"] .map-caption { opacity: .88; }
-html[data-stage="4"] .route-feedback, html[data-stage="5"] .route-feedback, html[data-stage="6"] .route-feedback { opacity: .9; }
-html[data-stage="4"] .scene-note-one, html[data-stage="5"] .scene-note-one, html[data-stage="6"] .scene-note-one, html[data-stage="3"] .scene-note-two, html[data-stage="4"] .scene-note-two, html[data-stage="5"] .scene-note-two, html[data-stage="6"] .scene-note-two { opacity: 1; }
-html[data-stage="3"] .system-scene { opacity: .52; }
-html[data-stage="4"] .system-scene { opacity: .48; }
-html[data-stage="5"] .system-scene { opacity: .28; }
-html[data-stage="6"] .system-scene { opacity: .16; }
+        <g class="map-caption" transform="translate(653 43)">
+          <text>REVIEWED BY A PERSON</text>
+          <text y="13" class="caption-live">LIVE WORKFLOW</text>
+        </g>
+        <circle class="signal" cx="264" cy="236" r="3" />
+        <circle class="signal" cx="444" cy="272" r="3" />
+        <circle class="signal" cx="628" cy="300" r="3" />
+      </svg>
+      <div class="scene-note scene-note-one"><span class="scene-note-dot"></span>THE TOOLS THE TEAM ALREADY USES</div>
+      <div class="scene-note scene-note-two"><span class="scene-note-dot"></span>HUMAN APPROVAL <span>ALWAYS</span></div>
+    </div>
 
-.site-header { position: fixed; z-index: 20; top: 0; left: 0; right: 0; height: 76px; display: flex; align-items: center; padding: 0 5.4vw; border-bottom: 1px solid #dfe2dcbb; background: #f7f7f3c9; backdrop-filter: blur(14px); }
-.wordmark { display: inline-flex; align-items: center; gap: 10px; font: 800 17px var(--display); letter-spacing: -.8px; }
-.mark { width: 20px; height: 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 2px; transform: rotate(-11deg); }
-.mark i { display: block; border-radius: 2px; background: var(--blue); }
-.mark i:nth-child(2), .mark i:nth-child(3) { background: var(--ink); }
-.desktop-nav { display: flex; gap: 31px; margin-left: auto; margin-right: 35px; color: #5e6562; font-size: 12px; }
-.desktop-nav a, .footer-right a { transition: color .2s; }
-.desktop-nav a:hover, .footer-right a:hover { color: var(--blue); }
-.header-cta { min-height: 37px; display: inline-flex; align-items: center; gap: 16px; padding: 0 14px; border: 1px solid #b8beb8; border-radius: 3px; font-size: 11px; font-weight: 600; transition: color .2s, background .2s, border .2s; }
-.header-cta:hover { color: white; border-color: var(--ink); background: var(--ink); }
-.chapter-rail { position: fixed; z-index: 15; top: 50%; right: 26px; display: grid; gap: 11px; transform: translateY(-50%); }
-.chapter-rail a { width: 24px; height: 24px; display: grid; place-items: center; color: #969d9a; border-radius: 50%; font: 8px var(--mono); transition: color .2s, background .2s, transform .2s; }
-.chapter-rail a::before { position: absolute; width: 3px; height: 3px; border-radius: 50%; background: #9fa6a4; content: ""; transition: opacity .2s; }
-.chapter-rail a span { opacity: 0; }
-.chapter-rail a[aria-current="step"] { color: #fff; background: var(--blue); transform: scale(1.08); }
-.chapter-rail a[aria-current="step"]::before { opacity: 0; }
-.chapter-rail a[aria-current="step"] span { opacity: 1; }
-.chapter-rail a:hover { color: white; background: #737fe1; }
+    <header class="site-header">
+      <a class="wordmark" href="#start" aria-label="TwoHundredK home">
+        <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+        TwoHundredK
+      </a>
+      <nav class="desktop-nav" aria-label="Primary">
+        <a href="#discover">Discover</a>
+        <a href="#connect">Connect</a>
+        <a href="#review">Review</a>
+        <a href="#improve">Improve</a>
+        <a href="#plans">Plans</a>
+        <a href="#questions">Questions</a>
+        <div class="hermes-link" hidden><a href="#" data-hermes-link>Hermes chat &#8599;</a></div>
+      </nav>
+      <a class="header-cta" href="#questions">Book an intro call <span>&#8599;</span></a>
+    </header>
 
-.story { position: relative; z-index: 1; }
-.chapter { position: relative; min-height: 100svh; display: flex; align-items: center; padding: 110px 12vw 76px 10vw; scroll-snap-align: start; scroll-snap-stop: always; }
-.chapter-content { position: relative; z-index: 2; width: min(520px, 50vw); }
-.hero-content { position: static; width: min(570px, 53vw); padding-top: 24px; }
-.eyebrow, .chapter-kicker { color: #777f7b; font: 500 9px/1.55 var(--mono); letter-spacing: .075em; }
-.hero-content > .eyebrow { display: flex; align-items: center; gap: 9px; color: #505956; }
-.live-dot { width: 7px; height: 7px; border-radius: 50%; background: #87b978; box-shadow: 0 0 0 3px #87b97825; }
-h1, h2, h3, p { margin-top: 0; }
-h1, h2, h3 { font-family: var(--display); }
-h1 { margin: 28px 0 23px; font-size: clamp(68px, 6vw, 86px); font-weight: 600; line-height: .93; letter-spacing: -.092em; }
-h1 em, h2 em { color: var(--blue); font-style: normal; }
-.chapter h2 { margin: 25px 0 22px; font-size: clamp(45px, 5.6vw, 72px); font-weight: 600; line-height: .99; letter-spacing: -.082em; }
-.chapter-intro { max-width: 480px; margin: 0; color: #626b67; font-size: 15px; line-height: 1.8; }
-.hero-actions { display: flex; align-items: center; gap: 25px; margin-top: 31px; }
-.button { min-height: 49px; display: inline-flex; align-items: center; justify-content: center; gap: 22px; padding: 0 18px; border: 1px solid transparent; border-radius: 3px; font-size: 11px; font-weight: 600; cursor: pointer; transition: transform .18s, background .18s, border .18s, color .18s; }
-.button:hover { transform: translateY(-2px); }
-.button:focus-visible, a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
-.button-dark { color: white; background: var(--ink); }
-.button-dark:hover { background: var(--blue); }
-.quiet-link, .text-link { color: #505a55; font-size: 11px; font-weight: 600; }
-.quiet-link span, .text-link span { margin-left: 6px; color: var(--blue); }
-.chapter-foot { position: absolute; top: calc(100svh - 102px); left: 10vw; width: min(760px, 67vw); display: flex; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--rule); color: #858d89; font: 8px var(--mono); letter-spacing: .06em; }
-.chapter-foot b { padding-left: 7px; color: var(--blue); font-size: 13px; font-weight: 400; }
-.hero-coordinate { position: absolute; right: 9vw; bottom: 35px; display: grid; gap: 5px; color: #89908c; font: 8px var(--mono); letter-spacing: .06em; text-align: right; }
-.chapter-kicker { display: flex; align-items: center; gap: 10px; }
-.chapter-kicker span:first-child { color: var(--blue); }
-.kicker-rule { width: 33px; height: 1px; background: #aab1ad; }
-.micro-list { display: flex; align-items: center; gap: 12px; margin-top: 27px; color: #4f5854; font: 9px var(--mono); letter-spacing: .08em; }
-.micro-list i { color: var(--blue); font-style: normal; }
-.aside-note { margin: 38px 0 0; color: #7a827d; font-size: 11px; }
-.aside-note span { margin-right: 7px; color: var(--blue); }
-.signal-note, .approval-note { display: flex; align-items: center; gap: 12px; margin-top: 32px; }
-.signal-icon { width: 32px; height: 32px; display: grid; place-items: center; color: var(--blue); border: 1px solid #c4cafa; border-radius: 50%; font-size: 17px; }
-.signal-note b, .approval-note b { display: block; color: #434b47; font-size: 11px; }
-.signal-note small, .approval-note small { display: block; margin-top: 4px; color: #89908c; font-size: 10px; }
-.approval-mark { width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--blue); border-radius: 50%; color: var(--blue); font-size: 13px; }
-.text-link { display: inline-block; margin-top: 25px; color: var(--blue); }
+    <nav class="chapter-rail" aria-label="Chapters">
+      <a href="#start" aria-label="Chapter 1, Start"><span>01</span></a>
+      <a href="#discover" aria-label="Chapter 2, Discover"><span>02</span></a>
+      <a href="#connect" aria-label="Chapter 3, Connect"><span>03</span></a>
+      <a href="#review" aria-label="Chapter 4, Review"><span>04</span></a>
+      <a href="#improve" aria-label="Chapter 5, Improve"><span>05</span></a>
+      <a href="#plans" aria-label="Chapter 6, Plans"><span>06</span></a>
+      <a href="#questions" aria-label="Chapter 7, Questions"><span>07</span></a>
+    </nav>
 
-.plans-chapter { min-height: 100svh; padding: 105px 7vw 66px; }
-.plans-content { width: min(1280px, 100%); margin: 0 auto; }
-.plans-heading { display: flex; align-items: end; justify-content: space-between; gap: 35px; margin: 13px 0 27px; }
-.plans-heading h2 { margin: 0; font-size: clamp(38px, 4.5vw, 55px); }
-.plans-heading > p { max-width: 325px; margin: 0 4% 4px 0; color: #646d68; font-size: 12px; line-height: 1.7; }
-.plan-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
-.plan-card { position: relative; min-height: 389px; display: flex; flex-direction: column; padding: 20px 19px 14px; border: 1px solid #d9ded8; background: #f9faf6d9; backdrop-filter: blur(5px); }
-.plan-featured { border-color: #7180ed; background: #edf0ffdf; }
-.plan-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 23px; color: #808984; font: 8px var(--mono); letter-spacing: .04em; }
-.plan-icon { color: var(--blue); font-size: 16px; }
-.featured-badge { position: absolute; top: -8px; right: 16px; padding: 4px 7px; color: white; background: var(--blue); font: 7px var(--mono); letter-spacing: .05em; }
-.plan-card h3 { margin: 0 0 5px; font-size: 23px; font-weight: 600; letter-spacing: -.06em; }
-.plan-for { min-height: 34px; margin: 0; color: #727b76; font-size: 10px; line-height: 1.55; }
-.plan-price { display: flex; align-items: baseline; gap: 6px; margin: 14px 0 12px; padding-bottom: 11px; border-bottom: 1px solid #dce0da; }
-.plan-price strong { font: 600 17px var(--display); letter-spacing: -.04em; }
-.plan-price span { color: #848d87; font-size: 9px; }
-.plan-card ul { display: grid; gap: 8px; margin: 0 0 15px; padding: 0; list-style: none; }
-.plan-card li { display: flex; gap: 7px; color: #555f59; font-size: 9px; line-height: 1.35; }
-.plan-card li::before { color: var(--blue); content: "â†—"; }
-.checkout-button { width: 100%; min-height: 37px; margin-top: auto; justify-content: space-between; padding-inline: 12px; font-size: 10px; }
-.button-outline { color: var(--ink); border-color: #c3cac4; background: transparent; }
-.button-outline:hover { color: var(--blue); border-color: var(--blue); }
-.checkout-button:disabled { cursor: wait; opacity: .75; }
-.plan-status { min-height: 11px; margin: 7px 0 0; color: #848d87; font-size: 8px; text-align: center; }
-.plans-footnote { margin: 12px 0 0; color: #818984; font-size: 9px; text-align: center; }
-.plans-footnote a { color: var(--blue); font-weight: 600; }
+    <main class="story" id="main">
+      <section class="chapter" id="start" data-stage="0">
+        <div class="chapter-content hero-content">
+          <p class="eyebrow"><span class="live-dot" aria-hidden="true"></span>FRACTIONAL FORWARD DEPLOYED ENGINEER &#183; TORONTO</p>
+          <h1>AI that gets <em>into the work</em>.</h1>
+          <p class="chapter-intro">A fractional Forward Deployed Engineer who sits inside your business, finds the workflow that costs the most hours, and ships AI that runs in the tools your team already uses.</p>
+          <div class="hero-actions">
+            <a class="button button-dark" href="#plans">See support levels <span>&#8599;</span></a>
+            <a class="quiet-link" href="#questions">Talk through a workflow <span>&#8599;</span></a>
+          </div>
+          <div class="micro-list"><span>FRACTIONAL</span><i>&#183;</i><span>HANDS-ON</span><i>&#183;</i><span>SHIPS WEEKLY</span></div>
+        </div>
+        <div class="chapter-foot"><span>TWO HUNDRED K <b>&#183;</b> FRACTIONAL FDE</span><span>01 / 07</span></div>
+        <div class="hero-coordinate" aria-hidden="true"><span>43.6532&#176; N</span><span>79.3832&#176; W</span><span>TORONTO, CA</span></div>
+      </section>
 
-.faq-chapter { padding-right: 10vw; }
-.faq-content { width: min(1060px, 100%); }
-.faq-layout { display: grid; grid-template-columns: .83fr 1.17fr; gap: 8vw; align-items: center; margin-top: 8px; }
-.faq-layout h2 { font-size: clamp(40px, 4.8vw, 58px); }
-.faq-intro { margin: -4px 0 25px; color: #747c77; font-size: 12px; }
-.faq-layout .button { min-height: 43px; }
-.faq-list { border-top: 1px solid var(--rule); }
-.faq-list details { border-bottom: 1px solid var(--rule); }
-.faq-list summary { display: flex; justify-content: space-between; gap: 18px; padding: 16px 0; font-size: 11px; font-weight: 600; cursor: pointer; list-style: none; }
-.faq-list summary::-webkit-details-marker { display: none; }
-.faq-list summary span { color: var(--blue); font-size: 15px; font-weight: 400; }
-.faq-list details p { max-width: 540px; margin: -2px 25px 16px 0; color: #717a75; font-size: 10px; line-height: 1.7; }
-.site-footer { position: absolute; bottom: 0; left: 0; right: 0; min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 18px; border-top: 1px solid var(--rule); }
-.site-footer .wordmark { font-size: 14px; }
-.site-footer .mark { width: 17px; height: 17px; }
-.footer-center { color: #89908b; font: 7px var(--mono); letter-spacing: .05em; }
-.footer-right { display: flex; align-items: center; gap: 20px; color: #727a75; font-size: 9px; }
-.footer-right > span { color: #929a94; font: 7px var(--mono); }
-.toast { position: fixed; z-index: 40; right: 22px; bottom: 22px; max-width: min(420px, calc(100% - 44px)); padding: 13px 17px; color: white; background: var(--ink); box-shadow: 0 10px 35px #0003; font-size: 11px; line-height: 1.5; opacity: 0; pointer-events: none; transform: translateY(10px); transition: opacity .2s, transform .2s; }
-.toast.is-visible { opacity: 1; transform: translateY(0); }
+      <section class="chapter" id="discover" data-stage="1">
+        <div class="chapter-content">
+          <p class="chapter-kicker"><span>02</span><span class="kicker-rule"></span><span>DISCOVER</span></p>
+          <h2>Find where work gets <em>stuck</em>.</h2>
+          <p class="chapter-intro">Two weeks inside the business: sit with the people doing the work, trace the handoffs between their tools, and measure where the hours actually go. No new software in this phase.</p>
+          <div class="micro-list"><span>INBOX</span><i>&#8594;</i><span>SPREADSHEET</span><i>&#8594;</i><span>CRM</span></div>
+          <p class="aside-note"><span>&#8627;</span>One workflow first: the one that costs the most hours, not the one that demos best.</p>
+        </div>
+        <div class="chapter-foot"><span>SCOPE <b>&#183;</b> ONE WORKFLOW</span><span>02 / 07</span></div>
+      </section>
 
-@media (max-width: 950px) {
-  .chapter { padding-left: 8vw; padding-right: 10vw; }
-  .chapter-content { width: min(450px, 54vw); }
-  .hero-content { width: min(510px, 58vw); }
-  .system-scene { right: -20vw; width: 72vw; opacity: .78; }
-  .plans-chapter { padding-inline: 5vw; }
-  .plan-card { padding-inline: 13px; }
-  .plan-card li { font-size: 8px; }
-  .faq-layout { gap: 5vw; }
-}
-@media (max-width: 680px) {
-  :root { scroll-snap-type: y proximity; }
-  .site-header { height: 64px; padding: 0 20px; }
-  .wordmark { font-size: 15px; }
-  .desktop-nav { display: none; }
-  .header-cta { min-height: 34px; margin-left: auto; font-size: 10px; }
-  .chapter-rail { top: 50%; right: 9px; gap: 6px; }
-  .chapter-rail a { width: 20px; height: 20px; font-size: 7px; }
-  .chapter { min-height: 100svh; padding: 100px 42px 70px 24px; }
-  .chapter-content, .hero-content { width: 100%; max-width: 475px; }
-  .hero-content { padding-top: 0; }
-  .hero-content > .eyebrow { max-width: 270px; font-size: 8px; }
-  h1 { margin: 23px 0 18px; font-size: clamp(60px, 17vw, 82px); }
-  .chapter h2 { margin: 22px 0 18px; font-size: clamp(42px, 12vw, 57px); }
-  .chapter-intro { max-width: 390px; font-size: 13px; line-height: 1.72; }
-  .hero-actions { align-items: flex-start; flex-direction: column; gap: 15px; margin-top: 24px; }
-  .button { min-height: 44px; font-size: 10px; }
-  .chapter-foot { top: auto; bottom: -30px; width: 100%; gap: 12px; font-size: 6px; }
-  .chapter-foot { left: 24px; bottom: 14px; width: calc(100% - 66px); }
-  .hero-coordinate { right: 43px; bottom: 39px; font-size: 6px; }
-  .system-scene { top: auto; right: -44%; bottom: -23%; width: 128vw; height: 48svh; opacity: .24; }
-  .system-map { right: 0; width: 100%; }
-  .scene-note { display: none; }
-  html[data-stage="0"] .ambient { background: radial-gradient(ellipse at 82% 80%, #e9e5db 0%, #f2f0e9 39%, transparent 76%), #f7f7f3; }
-  html[data-stage="1"] .ambient { background: radial-gradient(ellipse at 82% 80%, #dfe5f5 0%, #eff0f6 43%, transparent 78%), #f7f7f3; }
-  html[data-stage="2"] .ambient { background: radial-gradient(ellipse at 82% 80%, #d8defe 0%, #eceefa 47%, transparent 80%), #f7f7f3; }
-  html[data-stage="3"] .ambient { background: radial-gradient(ellipse at 82% 80%, #e0ddfa 0%, #f0eff9 49%, transparent 82%), #f7f7f3; }
-  html[data-stage="4"] .ambient { background: radial-gradient(ellipse at 82% 80%, #d9e9e7 0%, #eff3f0 50%, transparent 82%), #f7f7f3; }
-  html[data-stage="5"] .ambient { background: radial-gradient(ellipse at 82% 80%, #e3e6f5 0%, #f2f2f6 47%, transparent 80%), #f7f7f3; }
-  html[data-stage="6"] .ambient { background: radial-gradient(ellipse at 82% 80%, #e9e5db 0%, #f2f0e9 40%, transparent 76%), #f7f7f3; }
-  html[data-stage="0"] .system-scene { opacity: .15; }
-  html[data-stage="1"] .system-scene { opacity: .24; }
-  html[data-stage="2"] .system-scene { opacity: .36; }
-  html[data-stage="3"] .system-scene { opacity: .28; }
-  html[data-stage="4"] .system-scene { opacity: .38; }
-  html[data-stage="5"] .system-scene { opacity: .18; }
-  html[data-stage="6"] .system-scene { opacity: .12; }
-  .chapter-kicker { flex-wrap: wrap; gap: 7px; font-size: 7px; }
-  .kicker-rule { width: 19px; }
-  .micro-list { gap: 9px; margin-top: 22px; font-size: 8px; }
-  .aside-note { margin-top: 28px; font-size: 10px; }
-  .signal-note, .approval-note { margin-top: 25px; }
-  .signal-note b, .approval-note b { font-size: 10px; }
-  .plans-chapter { min-height: 100svh; padding: 90px 20px 45px; }
-  .plans-heading { align-items: flex-start; flex-direction: column; gap: 11px; margin: 12px 0 18px; }
-  .plans-heading h2 { font-size: 39px; }
-  .plans-heading > p { max-width: 350px; font-size: 10px; }
-  .plan-grid { grid-template-columns: 1fr; gap: 10px; }
-  .plan-card { min-height: 0; padding: 15px 15px 12px; }
-  .plan-top { margin-bottom: 9px; font-size: 7px; }
-  .plan-card h3 { font-size: 19px; }
-  .plan-for { min-height: 0; font-size: 9px; }
-  .plan-price { margin: 8px 0 8px; padding-bottom: 7px; }
-  .plan-price strong { font-size: 14px; }
-  .plan-card ul { grid-template-columns: 1fr 1fr; gap: 5px 9px; margin-bottom: 9px; }
-  .plan-card li { font-size: 8px; }
-  .checkout-button { min-height: 32px; }
-  .plan-status { display: none; }
-  .plans-footnote { margin-top: 9px; font-size: 8px; line-height: 1.5; }
-  .faq-layout { grid-template-columns: 1fr; gap: 27px; margin-top: 23px; }
-  .faq-layout h2 { font-size: 42px; }
-  .faq-intro { margin-bottom: 17px; font-size: 10px; }
-  .faq-list summary { padding: 12px 0; font-size: 10px; }
-  .faq-list details p { font-size: 9px; }
-  .site-footer { position: static; flex-wrap: wrap; gap: 9px; margin-top: 30px; padding: 13px 0 0; }
-  .footer-center { order: 3; width: 100%; }
-  .footer-right { gap: 10px; font-size: 8px; }
-  .footer-right > span { font-size: 6px; }
-  .faq-chapter { padding-bottom: 35px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; }
-  :root { scroll-snap-type: none; }
-  .signal { display: none; }
-}
+      <section class="chapter" id="connect" data-stage="2">
+        <div class="chapter-content">
+          <p class="chapter-kicker"><span>03</span><span class="kicker-rule"></span><span>CONNECT</span></p>
+          <h2>Connect the tools; <em>preserve</em> the process.</h2>
+          <p class="chapter-intro">One active path links the inbox, the sheet, and the CRM. The work keeps moving the way your team already runs it, so nobody has to relearn their job to get the benefit.</p>
+          <div class="signal-note">
+            <span class="signal-icon" aria-hidden="true">&#10551;</span>
+            <div><b>A live path, not a new system of record.</b><small>Your team keeps its tools. The handling moves.</small></div>
+          </div>
+          <div class="micro-list"><span>CRM</span><i>&#8594;</i><span>WORKFLOW</span><i>&#8594;</i><span>DONE</span></div>
+        </div>
+        <div class="chapter-foot"><span>BUILD <b>&#183;</b> WEEKS, NOT QUARTERS</span><span>03 / 07</span></div>
+      </section>
+
+      <section class="chapter" id="review" data-stage="3">
+        <div class="chapter-content">
+          <p class="chapter-kicker"><span>04</span><span class="kicker-rule"></span><span>REVIEW</span></p>
+          <h2>AI drafts. <em>You decide</em> what ships.</h2>
+          <p class="chapter-intro">Drafting, sorting, and summarizing run automatically. Anything that leaves the building passes a named human gate, with the approval rule written down before launch.</p>
+          <div class="approval-note">
+            <span class="approval-mark" aria-hidden="true">&#10003;</span>
+            <div><b>Every output passes a human gate.</b><small>Defined per workflow, reviewed before go-live.</small></div>
+          </div>
+          <p class="aside-note"><span>&#8627;</span>If the model is unsure, it escalates to a person instead of guessing.</p>
+        </div>
+        <div class="chapter-foot"><span>GOVERNANCE <b>&#183;</b> HUMAN IN THE LOOP</span><span>04 / 07</span></div>
+      </section>
+
+      <section class="chapter" id="improve" data-stage="4">
+        <div class="chapter-content">
+          <p class="chapter-kicker"><span>05</span><span class="kicker-rule"></span><span>IMPROVE</span></p>
+          <h2>Stay useful after <em>go-live</em>.</h2>
+          <p class="chapter-intro">A standing review of what the workflow got right, what it got wrong, and what changed in the business. Fixes land in the same week rather than waiting for a quarterly roadmap.</p>
+          <div class="micro-list"><span>RUNS</span><i>&#8594;</i><span>REVIEW</span><i>&#8594;</i><span>RETUNE</span></div>
+          <p class="aside-note"><span>&#8627;</span>You get the workflow and the reasoning behind it, not a black box you rent.</p>
+        </div>
+        <div class="chapter-foot"><span>OPERATE <b>&#183;</b> ONGOING</span><span>05 / 07</span></div>
+      </section>
+
+      <section class="chapter plans-chapter" id="plans" data-stage="5">
+        <div class="plans-content">
+          <p class="chapter-kicker"><span>06</span><span class="kicker-rule"></span><span>PLANS</span></p>
+          <div class="plans-heading">
+            <h2>Choose the <em>support level</em>.</h2>
+            <p>Every plan is monthly and scoped with you before work starts. Pricing is agreed on the intro call; nothing is charged until the scope is signed off.</p>
+          </div>
+          <div class="plan-grid">
+            <article class="plan-card">
+              <span class="plan-top"><span>LAUNCH</span><span class="plan-icon" aria-hidden="true">&#9671;</span></span>
+              <h3>Launch</h3>
+              <p class="plan-for">One workflow, shipped and running with your team.</p>
+              <div class="plan-price"><strong data-price="launch">Monthly &#183; scope agreed</strong><span>cancel anytime</span></div>
+              <ul>
+                <li>Discovery on a single workflow</li>
+                <li>Build and launch in weeks</li>
+                <li>Human approval gate defined</li>
+                <li>Handover documentation</li>
+              </ul>
+              <button class="button button-outline checkout-button" type="button" data-checkout="launch">Start with Launch <span aria-hidden="true">&#8599;</span></button>
+              <p class="plan-status" data-status="launch">Checkout opens after scope is agreed.</p>
+            </article>
+
+            <article class="plan-card plan-featured">
+              <span class="featured-badge">MOST REQUESTED</span>
+              <span class="plan-top"><span>BUILD</span><span class="plan-icon" aria-hidden="true">&#9670;</span></span>
+              <h3>Build</h3>
+              <p class="plan-for">Two to three connected workflows, with the team trained on them.</p>
+              <div class="plan-price"><strong data-price="build">Monthly &#183; scope agreed</strong><span>cancel anytime</span></div>
+              <ul>
+                <li>Everything in Launch</li>
+                <li>Multiple connected workflows</li>
+                <li>Team training and runbooks</li>
+                <li>Fortnightly improvement review</li>
+              </ul>
+              <button class="button button-dark checkout-button" type="button" data-checkout="build">Start with Build <span aria-hidden="true">&#8599;</span></button>
+              <p class="plan-status" data-status="build">Checkout opens after scope is agreed.</p>
+            </article>
+
+            <article class="plan-card">
+              <span class="plan-top"><span>EMBEDDED</span><span class="plan-icon" aria-hidden="true">&#9672;</span></span>
+              <h3>Embedded</h3>
+              <p class="plan-for">Ongoing FDE time inside the team, week over week.</p>
+              <div class="plan-price"><strong data-price="embedded">Monthly &#183; scope agreed</strong><span>cancel anytime</span></div>
+              <ul>
+                <li>Everything in Build</li>
+                <li>Reserved hours each week</li>
+                <li>New workflows as needs change</li>
+                <li>Direct line to the engineer</li>
+              </ul>
+              <button class="button button-outline checkout-button" type="button" data-checkout="embedded">Start with Embedded <span aria-hidden="true">&#8599;</span></button>
+              <p class="plan-status" data-status="embedded">Checkout opens after scope is agreed.</p>
+            </article>
+          </div>
+          <p class="plans-footnote">Scope, price, and ownership are agreed in writing before anything is built. <a href="#questions">Ask about a custom engagement &#8599;</a></p>
+        </div>
+      </section>
+
+      <section class="chapter faq-chapter" id="questions" data-stage="6">
+        <div class="chapter-content faq-content">
+          <p class="chapter-kicker"><span>07</span><span class="kicker-rule"></span><span>QUESTIONS</span></p>
+          <div class="faq-layout">
+            <div>
+              <h2>Clarify <em>boundaries</em> before starting.</h2>
+              <p class="faq-intro">What the work includes, what it does not, and who owns what afterwards.</p>
+              <a class="button button-dark" href="#plans">See the plans <span>&#8599;</span></a>
+            </div>
+            <div class="faq-list">
+              <details>
+                <summary>What does a fractional Forward Deployed Engineer do? <span>+</span></summary>
+                <p>I work inside your business on one workflow at a time: understanding how the work happens today, then building and running the AI that takes the repetitive handling out of it. Fractional means the time is scoped rather than a full-time hire.</p>
+              </details>
+              <details>
+                <summary>Do we need to replace our current tools? <span>+</span></summary>
+                <p>No. The work is designed around the inbox, spreadsheet, and CRM your team already uses. Replacing a system of record is a much larger project and is not part of the starting scope.</p>
+              </details>
+              <details>
+                <summary>What happens if the AI gets something wrong? <span>+</span></summary>
+                <p>Outputs that leave the building pass a human approval gate defined before launch. When the workflow is unsure, it escalates to a person instead of guessing, and every exception is reviewed.</p>
+              </details>
+              <details>
+                <summary>How is pricing decided? <span>+</span></summary>
+                <p>Prices are agreed on the intro call once the workflow and support level are clear. The labels on the plans page are shown at runtime from the site configuration, so the figures you see are the current confirmed ones.</p>
+              </details>
+              <details>
+                <summary>Who owns the workflow after it ships? <span>+</span></summary>
+                <p>You do. The workflow, its prompts, and its documentation are handed over, and the Improve level exists for businesses that want the reasoning and tuning handled on an ongoing basis.</p>
+              </details>
+            </div>
+          </div>
+        </div>
+        <footer class="site-footer">
+          <a class="wordmark" href="#start" aria-label="TwoHundredK home">
+            <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+            TwoHundredK
+          </a>
+          <span class="footer-center">FRACTIONAL FORWARD DEPLOYED ENGINEER &#183; TORONTO</span>
+          <div class="footer-right">
+            <span>&#169; <span id="year">2026</span></span>
+            <a href="#questions">Contact</a>
+            <a href="#plans">Plans</a>
+          </div>
+        </footer>
+      </section>
+    </main>
+
+    <div class="toast" role="status" aria-live="polite"></div>
+  </body>
+</html>
