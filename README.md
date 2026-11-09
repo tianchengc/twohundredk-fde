@@ -70,7 +70,7 @@ Set non-secret variables in `wrangler.jsonc` or Cloudflare Worker settings:
 
 The site chat is connected to the Hermes assistant through the Worker. The browser posts to the same-origin `/api/chat` endpoint, which forwards a bounded conversation to the Hermes API using server-side credentials; nothing about the credential or upstream URL is exposed to the page. `/api/config` reports `assistantEnabled`, and the endpoint fails closed with a safe message when the integration is off or the upstream call fails.
 
-The assistant (profile `twohundredk-fde`) answers from owner-approved site facts, does not quote prices, and refers booking decisions to Tiancheng. It does not create or change bookings — that stays with the owner and the admin API. `HERMES_CHAT_URL`, if set, only adds an external chat link and is not the integration path.
+The assistant (profile `twohundredk-fde`) answers from owner-approved site facts, including the public professional profile maintained in `src/knowledge/tiancheng-profile.js`, does not quote prices, and refers booking decisions to Tiancheng. The public About section and the Worker prompt use this same approved profile material. The assistant does not create or change bookings — that stays with the owner and the admin API. `HERMES_CHAT_URL`, if set, only adds an external chat link and is not the integration path.
 
 ## Current limits before production
 
@@ -78,7 +78,7 @@ The assistant (profile `twohundredk-fde`) answers from owner-approved site facts
 - Stripe test and live accounts, three monthly prices, webhook endpoint, billing portal, and tax settings need configuration.
 - Add service terms, cancellation/refund details, privacy notice, and contact information.
 - The verified webhook is an integration point, not yet an onboarding or subscription fulfillment system.
-- No deployment, domain/DNS, billing account, or live payment was changed by this scaffold.
+- The Worker is deployed at `https://twohundredk.tianchengc.workers.dev/`. The `twohundredk.com` custom-domain cutover remains pending; Stripe subscription checkout is still unconfigured.
 
 ## Bookings (Phase 1a)
 

@@ -12,10 +12,10 @@ The first public experience should help prospective clients understand the offer
 
 1. A visitor opens the website's built-in chat.
 2. The assistant answers only from current, owner-approved information about Tiancheng, the FDE service, scope, and published plans.
-3. It asks a few useful questions, with the visitor's consent, to understand the business problem and record a minimal lead summary.
-4. The visitor schedules a consultation through Tiancheng's ADPList booking flow.
-5. The visitor and owner receive confirmation/reminders through an approved email workflow, if ADPList or the selected integration supports it.
-6. The assistant hands off unanswered questions, custom scope/pricing, time changes, or other exceptions to Tiancheng. It must not claim that a booking or follow-up action succeeded until the system confirms it.
+3. With consent, the visitor can ask about Tiancheng's background and the service; the chat sends the bounded conversation to the dedicated Hermes profile through the Worker.
+4. The visitor can request an intro call through the site form (saved as a request, not a confirmed appointment) or use ADPList for instant booking.
+5. Tiancheng reviews booking requests on the owner side and confirms them manually. Automated email notifications/reminders are not part of the live flow yet.
+6. The assistant hands off unanswered questions, custom scope/pricing, and other exceptions to Tiancheng. It must not claim a booking or follow-up succeeded unless the system confirms it.
 
 ## Intended operator journey
 
@@ -24,19 +24,13 @@ The first public experience should help prospective clients understand the offer
 - A clear pause/disable route must stop automatic public replies without affecting manual booking or the marketing site.
 - Hermes agent access should be scoped to this business workflow. Do not reuse a personal profile or expose unrelated personal history and tools to the public site.
 
-## Integration boundary to validate
+## Live integration boundary
 
-The existing Cloudflare Worker is a suitable site-side boundary for a server-side integration, but it currently serves `/api/config`, Stripe Checkout, and Stripe webhook handling only. `HERMES_CHAT_URL` reveals an external link; it is not a chat API connection. The Stripe webhook currently acknowledges verified events without onboarding or downstream actions.
+The Cloudflare Worker serves the public site, D1 booking requests, a key-protected owner booking API, and the same-origin `/api/chat` proxy to Hermes. The visitor chat can reach only the `twohundredk-fde` talk-only profile; its gateway key stays server-side. The profile has no browser, file, shell, memory, or general web tools. `HERMES_CHAT_URL`, if configured, is only a navigation link and is not the chat integration.
 
-Before implementation, verify from current official documentation or a safe test environment:
+The website's owner-approved professional profile is maintained in `src/knowledge/tiancheng-profile.js` and is included in the Worker system prompt for each Hermes chat request. The About section in `public/index.html` presents the same facts to visitors. The Hermes profile also needs its own matching persistent knowledge entry, maintained separately by the owner-side operator.
 
-- What authenticated, supported interface Hermes exposes for an external website chat, and whether it can be restricted to the TwoHundredK business profile and narrow tools.
-- Whether ADPList provides an authorized API, embed, or deep link that supports creating and confirming bookings. Do not assume browser automation or scraping is a supported booking integration.
-- Whether ADPList can send booking confirmation/reminder emails for the selected session type; otherwise identify a minimal, reliable email route.
-- Data retention, consent, identity, rate-limit, abuse protection, and deletion behavior for website inquiries.
-- Whether Hermes' current WebUI/dashboard at `hermes.twohundredk.com` is an appropriate owner admin surface or only the chat surface; keep the two roles distinct in the design.
-
-Until direct ADPList booking is verified, the MVP can use the official hosted ADPList booking page as a visitor handoff. The assistant must say the visitor is being sent to ADPList; it must not claim to reserve a slot itself.
+Booking requests are not confirmed appointments. The site form stores a request in D1 for Tiancheng to review; ADPList remains the instant-confirmation route. Email notifications/reminders and automated booking changes are not enabled. The Stripe webhook validates the signature and acknowledges events but does not fulfill subscriptions or trigger downstream work.
 
 ## Phased scope
 
@@ -73,6 +67,7 @@ After the personal workflow meets its acceptance criteria, extract reusable busi
 - **Phase 1a — done and live:** the site's request form posts to `POST /api/bookings`, which stores each request in Cloudflare D1 (database `twohundredk-bookings`). `/api/config` reports `bookingEnabled: true`, so the page shows the request form instead of falling back to ADPList. Requests persist as `status = "requested"`; they are not confirmed appointments.
 - **Phase 1b — done:** bookings are administered from the owner side through the admin API (`GET` list, `GET` one, `PATCH` status), behind the admin key. Validated end to end on the live deployment: create → confirm → cancel.
 - **Phase 1c — done and live:** the site chat is connected to the Hermes assistant (profile `twohundredk-fde`) through the Worker `/api/chat` proxy; `/api/config` reports `assistantEnabled: true`. The assistant answers from approved site facts, does not quote prices, and hands booking decisions to the owner. Hermes credentials stay server-side, and the endpoint fails closed with a safe message if the integration is off.
+- **Tiancheng profile knowledge — Hermes done; website deployment pending:** Muse updated only `/home/hermes/.hermes/profiles/twohundredk-fde/SOUL.md` with owner-approved facts and verified an accurate experience answer through live website chat. The public About section and matching Worker-side knowledge source are implemented locally; mark the combined feature live only after the website change is deployed and rendered.
 - **Phase 2 — not started:** chat-initiated booking create/update and any ADPList replacement remain future work requiring separate approval.
 - **Instant booking:** Tiancheng's ADPList profile remains the instant-confirmation path and is still linked from the site. The request form is separate from it; the website still does not claim to create or confirm an ADPList booking.
 - **Deployment status:** verified on `https://twohundredk.tianchengc.workers.dev/` on 2026-11-08. `/api/config` reports both `bookingEnabled` and `assistantEnabled` true; `/api/chat` returns a live reply that declined to quote a price; `/api/bookings` rejects invalid input with `400` and non-same-origin requests with `403`; the admin API returns `401` without a valid key. The public domain `twohundredk.com` still points at the previous host and does not yet serve this Worker — the worker URL is the live surface.

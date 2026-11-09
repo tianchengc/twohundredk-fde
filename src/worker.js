@@ -1,3 +1,5 @@
+import { TIANCHENG_PROFILE_KNOWLEDGE } from "./knowledge/tiancheng-profile.js";
+
 const PLANS = {
   launch: {
     name: "Launch",
@@ -117,7 +119,7 @@ async function chat(request, env) {
         temperature: 0.2,
         max_tokens: 500,
         messages: [
-          { role: "system", content: CONSULTING_CHAT_SYSTEM_PROMPT },
+          { role: "system", content: `${CONSULTING_CHAT_SYSTEM_PROMPT}\n\n${TIANCHENG_PROFILE_KNOWLEDGE}` },
           ...messages,
         ],
       }),

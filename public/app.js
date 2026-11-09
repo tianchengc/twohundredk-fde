@@ -48,6 +48,12 @@ async function loadConfig() {
     window.assistantEnabled = config.assistantEnabled === true;
     window.bookingUrl = config.bookingUrl || "https://adplist.org/mentors/tiancheng-chen";
     window.bookingEnabled = config.bookingEnabled === true;
+    const disclosure = document.querySelector(".chat-disclosure");
+    if (disclosure) {
+      disclosure.textContent = window.assistantEnabled
+        ? "This chat uses the TwoHundredK assistant to answer from approved information about Tiancheng and the service. Please don’t share sensitive information; confirm important details with Tiancheng."
+        : "Live AI replies aren’t connected yet, so your message won’t be sent. You can still use the booking link below. Please don’t share sensitive information.";
+    }
     if (!window.assistantEnabled && chatMessages && chatMessages.childElementCount === 0) {
       addChatMessage("assistant", "I’m not connected yet. You can book an intro session below; ADPList will show available times and confirm the booking.");
     }
